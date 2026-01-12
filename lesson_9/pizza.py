@@ -1,39 +1,42 @@
 from abc import ABC, abstractmethod
 
+
 class Pizza:
     def __init__(self, size, ingredients):
         self.size = size
         self._ingredients = list(ingredients)
-        self.base_prices = {"small": 10.0, "medium": 15.0, "large": 20.0}
+        self.base_prices = {"S": 10.0, "M": 15.0, "L": 20.0}
 
-@property
-def ingredients(self):
-    return self._ingredients
+    @property
+    def ingredients(self):
+        return self._ingredients
 
-def add_ingredients(self, ingredient):
-    if len(self._ingredients) < 10:
-        self._ingredients.append(ingredient)
-    else:
-        print("Нельзя выбрать больше 10 ингредиентов. Пицца будет слишком толстой и не пропечется!")
+    def add_ingredient(self, ingredient):
+        if len(self._ingredients) < 10:
+            self._ingredients.append(ingredient)
+        else:
+            print("Очень много начинки! Пицца не пропечется!")
 
- def calculate_price(self):
-     price = self.base_prices.get(self.size, 10.0) + len(self._ingredients) * 1.0
-     return float(price)
+    def calculate_price(self):
+        price = self.base_prices.get(self.size, 10.0) + len(self._ingredients) * 1.0
+        return float(price)
+
 
 class MeatPizza(Pizza):
     def calculate_price(self):
-        base_calc = super().calculate_price()
-        return round(base_calc * 1.2, 2)
+        return round(super().calculate_price() * 1.2, 2)
+
 
 class VeggiePizza(Pizza):
     def calculate_price(self):
-        base_calc = super().calculate_price()
-        return round(base_calc * 0.9, 2)
+        return round(super().calculate_price() * 0.9, 2)
+
 
 class Order(ABC):
     @abstractmethod
     def prepare(self):
         pass
+
 
 class PizzaOrder(Order):
     def __init__(self, pizza):
@@ -51,6 +54,8 @@ class PizzaOrder(Order):
             pizza_type = "Обычную"
 
         print(f"Готовим {pizza_type} пиццу размера {self.pizza.size} ({ingredients_list}). Цена: {price}$")
+
+
 class Pizzeria:
     def take_order(self, pizza_type, size, ingredients):
         if pizza_type.lower() == "meat":
@@ -60,7 +65,12 @@ class Pizzeria:
         else:
             pizza = Pizza(size, ingredients)
 
-    order = PizzaOrder(Pizza)
-    order.prepare()
+        order = PizzaOrder(pizza)
+        order.prepare()
 
-# Пример использования:
+
+
+
+my_pizzeria = Pizzeria()
+my_pizzeria.take_order("meat", "L", ["бекон", "пепперони", "сыр"])
+my_pizzeria.take_order("veggie", "S", ["сыр", "оливки"])
